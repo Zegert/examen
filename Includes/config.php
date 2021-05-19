@@ -68,15 +68,24 @@ function Conn()
     }
 }
 // Deze functie voegt een gebruiker toe.
-function AddUser($username, $password, $rank, $firstname, $lastname, $phone, $email){
+function AddUser($username, $password, $firstname, $lastname, $phone, $email){
     try {
         $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, phone, email, created_at, updated_at) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([null, SQLInjectionFormat($username), $password, $rank, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), $phone, $email, null, null]);
+        $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), $phone, $email, null, null]);
     } catch (PDOException $e) {
         $error = "Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage();
         return $error;
     }
 }
 
-?>
+function SelectAllTime(){
+    $stmt = Conn()->prepare("SELECT * FROM times ORDER BY date DESC");
+    $stmt->execute();
+    return $stmt;
+}
+
+function AmountSpaceFree($amount_people_in){
+    $answer = 100 - $amount_people_in;
+    return $answer;
+}

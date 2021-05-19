@@ -1,6 +1,6 @@
 <?php
 require_once('../Includes/config.php');
-// CheckRank(2);
+Session();
 ?>
 <html lang="en">
 
@@ -14,9 +14,6 @@ require_once('../Includes/config.php');
 </head>
 
 <body>
-    <?php
-    include_once('../Includes/nav.php');
-    ?>
     <div class="container">
         <div class="card bg-light">
             <article class="card-body mx-auto" style="max-width: 400px;">
@@ -36,17 +33,6 @@ require_once('../Includes/config.php');
                     </div> <!-- form-group// -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-building"></i> </span>
-                        </div>
-                        <div class="form-control">
-                            <input id='docent' type="radio" name='rank' value='1'>
-                            <label for='docent'>User</label>
-                            <input id='Admin' type="radio" name='rank' value='2'>
-                            <label for='Admin'>Admin</label>
-                        </div>
-                    </div> <!-- form-group end.// -->
-                    <div class="form-group input-group">
-                        <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
                         <input type="text" name="firstname" class="form-control" placeholder="Voornaam" required><br>
@@ -61,8 +47,8 @@ require_once('../Includes/config.php');
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br>
-                    </div> <!-- form-group// -->
+                        <input type="tel" class="form-control" name="phone" pattern="[0-9]{2}-[0-9]{8}" placeholder="06-12345678" required><br>
+                    </div> <!-- form-group// 06-30822558-->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
