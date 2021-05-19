@@ -15,9 +15,9 @@ function ID()
 {
     session_start();
     session_regenerate_id();
-    if (isset($_SESSION['ID'])){
+    if (isset($_SESSION['ID'])) {
         return $_SESSION['ID'];
-    }else{
+    } else {
         return 0;
     }
 }
@@ -53,7 +53,7 @@ function Conn()
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-    $dsn = "mysql:host=localhost;dbname=ex_83504";
+    $dsn         = "mysql:host=localhost;dbname=ex_83504";
     $DB_username = "ex83504";
     $DB_password = "Cy8o^n68";
 
@@ -67,38 +67,44 @@ function Conn()
     }
 }
 // Deze functie voegt een gebruiker toe.
-function AddUser($username, $password, $firstname, $lastname, $phone, $email){
+function AddUser($username, $password, $firstname, $lastname, $phone, $email)
+{
     try {
-        $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, phone, email, created_at, updated_at) 
+        $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, phone, email, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), $phone, $email, null, null]);
+        echo "yeet";
+        return true;
     } catch (PDOException $e) {
-        $error = "Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage();
-        return $error;
+        echo "bruh";
+        echo "Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage();
+        return false;
     }
 }
 // Selecteert alle items uit de times tabel
-function SelectAllTime(){
+function SelectAllTime()
+{
     $stmt = Conn()->prepare("SELECT * FROM times ORDER BY date DESC");
     $stmt->execute();
     return $stmt;
 }
 // Geeft het aantal vrije plekken terug
-function AmountSpaceFree($amount_people_in){
+function AmountSpaceFree($amount_people_in)
+{
     $answer = 100 - $amount_people_in;
     return $answer;
 }
 // Registreert een reservering en telt er een bij op in de times tabel.
-function Register($ID){
-    try{
+function Register($ID)
+{
+    try {
         $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
         $stmt_increment_times->execute([$ID]);
         $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
-        $stmt_insert->execute([null, ID(), $ID, false, null, null]);
+        $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
         echo "Geslaagd!";
-    }catch(PDOException $e){
+    } catch (PDOException $e) {
         echo "Reservering niet geslaagd. Error: " . $e->getMessage();
     }
-        
 
 }
