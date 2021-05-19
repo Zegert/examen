@@ -38,7 +38,6 @@ CheckRank(1);
                 echo "<td>" . $row['time'] . "</td>";
                 echo "<td>" . AmountSpaceFree($row['amount_people_in']) . "</td>";
                 echo "<td>" . $row['updated_at'] . "</td>";
-                // echo "<td><a href='./inschrijven_verwerk.php?ID=" . $row['ID'] . "'>Inschrijven</a></td>";
                 echo '<td><a href="./register_proces.php?ID=' . $row['ID'] . '">Inschrijven</a></td>';
                 echo "</tr>";
             }

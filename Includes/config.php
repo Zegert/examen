@@ -1,5 +1,4 @@
 <?php
-
 // Begint een sessie en geeft de rank van de gebruiker terug
 function Session()
 {
@@ -11,7 +10,7 @@ function Session()
         return 0;
     }
 }
-// Geeft het ID van een ingelogde gebruiker terug
+// Begint een sessie en geeft het ID van een ingelogde gebruiker terug
 function ID()
 {
     session_start();
@@ -78,18 +77,18 @@ function AddUser($username, $password, $firstname, $lastname, $phone, $email){
         return $error;
     }
 }
-
+// Selecteert alle items uit de times tabel
 function SelectAllTime(){
     $stmt = Conn()->prepare("SELECT * FROM times ORDER BY date DESC");
     $stmt->execute();
     return $stmt;
 }
-
+// Geeft het aantal vrije plekken terug
 function AmountSpaceFree($amount_people_in){
     $answer = 100 - $amount_people_in;
     return $answer;
 }
-
+// Registreert een reservering en telt er een bij op in de times tabel.
 function Register($ID){
     try{
         $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
