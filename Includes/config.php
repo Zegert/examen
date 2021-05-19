@@ -89,3 +89,17 @@ function AmountSpaceFree($amount_people_in){
     $answer = 100 - $amount_people_in;
     return $answer;
 }
+
+function Register($ID){
+    try{
+        $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
+        $stmt_increment_times->execute([$ID]);
+        $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
+        $stmt_insert->execute([null, ID(), $ID, false, null, null]);
+        echo "Geslaagd!";
+    }catch(PDOException $e){
+        echo "Reservering niet geslaagd. Error: " . $e->getMessage();
+    }
+        
+
+}
