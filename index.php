@@ -2,9 +2,10 @@
 
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<link href="./Includes/index.css" rel="stylesheet">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link href="./Includes/CSS/index.css" rel="stylesheet">
+    <title>Aanmelden Schaatsliefhebbers</title>
 </head>
 
 <body>
@@ -22,7 +23,7 @@
                     autocomplete="current-password" placeholder="Wachtwoord..."><br>
 
                 <input type="submit" class="input fadeIn fourth" id="submit" value="Login" name="submit"><br>
-                <a href="users/student_new.php">Nog geen account?</a>
+                <a href="./users/user_new.php">Nog geen account?</a>
             </form>
         </div>
 </body>

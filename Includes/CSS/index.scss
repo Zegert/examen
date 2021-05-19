@@ -1,9 +1,6 @@
-
-/* BASIC */
-
 html {
-    background-color: #56baed;
-  }
+    background-image: url("./Includes/IMG/wallpaper.webp");
+    background-color: #cccccc;  }
   
   body {
     font-family: "Poppins", sans-serif;
@@ -63,11 +60,6 @@ html {
     -webkit-border-radius: 0 0 10px 10px;
     border-radius: 0 0 10px 10px;
   }
-  
-  
-  
-  /* TABS */
-  
   h2.inactive {
     color: #cccccc;
   }
@@ -76,10 +68,6 @@ html {
     color: #0d0d0d;
     border-bottom: 2px solid #5fbae9;
   }
-  
-  
-  
-  /* FORM TYPOGRAPHY*/
   
   input[type=button], input[type=submit], input[type=reset]  {
     background-color: #56baed;
@@ -144,12 +132,6 @@ html {
   input[type=text]:placeholder, input[type=password]:placeholder  {
     color: #cccccc;
   }
-  
-  
-  
-  /* ANIMATIONS */
-  
-  /* Simple CSS3 Fade-in-down Animation */
   .fadeInDown {
     -webkit-animation-name: fadeInDown;
     animation-name: fadeInDown;
@@ -184,8 +166,6 @@ html {
       transform: none;
     }
   }
-  
-  /* Simple CSS3 Fade-in Animation */
   @-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
   @-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
   @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -248,11 +228,6 @@ html {
   .underlineHover:hover:after{
     width: 100%;
   }
-  
-  
-  
-  /* OTHERS */
-  
   *:focus {
       outline: none;
   } 

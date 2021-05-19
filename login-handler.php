@@ -1,27 +1,18 @@
 <?php
 require_once './Includes/config.php';
+session_start();
 $username = $_POST['inputUsername'];
 $password = $_POST['inputPassword'];
 
-$resultDocent = $conn->prepare("SELECT * FROM docenten WHERE Username=?");
-$resultDocent->execute([$username]);
-$rowDocent = $resultDocent->fetch();
+$result = Conn()->prepare("SELECT * FROM users WHERE username=?");
+$result->execute([$username]);
+$row = $result->fetch();
 
-$resultStudent = $conn->prepare("SELECT * FROM studenten WHERE Username=?");
-$resultStudent->execute([$username]);
-$rowStudent = $resultStudent->fetch();
-
-if (password_verify($password, $rowDocent['Password'])) {
-    $_SESSION['ID']   = $rowDocent['ID'];
-    $_SESSION['rang'] = $rowDocent['Rang'];
-    if ($_SESSION['rang'] >= 2) {
-        header("Location: docent/home.php");
-    }
-} elseif (password_verify($password, $rowStudent['Password'])) {
-    $_SESSION['ID']   = $rowStudent['ID'];
-    $_SESSION['rang'] = $rowStudent['Rang'];
-    if ($_SESSION['rang'] >= 1) {
-        header("Location: student/home.php");
+if (password_verify($password, $row['password'])) {
+    $_SESSION['ID']   = $row['ID'];
+    $_SESSION['rank'] = $row['rank'];
+    if ($_SESSION['rank'] >= 1) {
+        header("Location:./home/");
     }
 }else{
     header("Location: index.php");
