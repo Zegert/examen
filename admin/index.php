@@ -24,7 +24,7 @@ CheckRank(2);
       <a class="nav-link">Tijdstippen</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="./timeslot_create.php">Reserveer voor een groep</a>
+      <a class="nav-link" href="./timeslot_edit.php">Reserveer voor een groep</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="./timeslot_create.php">Maak nieuw tijdstip aan</a>
@@ -51,7 +51,7 @@ CheckRank(2);
         echo "<td>" . $row['endtime'] . "</td>";
         echo "<td>" . AmountSpaceFree($row['amount_people_in']) . "</td>";
         echo "<td>" . $row['updated_at'] . "</td>";
-        echo "<td><a href='timeslot_edit.php'>Aanpassen</a></td>";
+        echo '<td><a href="./timeslot_edit.php?ID=' . $row['ID'] . '">Aanpassen</a></td>';
         echo "</tr>";
       }
       ?>

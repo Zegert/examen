@@ -111,11 +111,15 @@ function AmountSpaceFree($amount_people_in)
 function Register($ID)
 {
     try {
-        $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
-        $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
-        $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
-        $stmt_increment_times->execute([$ID]);
-        $register = true;
+        if (CheckAmountOfReservations($ID) <= 100) {
+            $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
+            $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
+            $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
+            $stmt_increment_times->execute([$ID]);
+            $register = true;
+        } else {
+            $register = "Dit moment zit helaas al vol.";
+        }
     } catch (PDOException $e) {
         $register = "Reservering niet geslaagd. Error: " . $e->getMessage();
     }
@@ -148,4 +152,48 @@ function AddTime($date, $starttime, $endtime)
         $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
     }
     return $addtime;
+}
+
+function GetPersonalData()
+{
+    $stmt = Conn()->prepare("SELECT * FROM users WHERE ID=?");
+    $stmt->execute([ID()]);
+    $data = $stmt->fetch();
+    return $data;
+}
+
+function GetTimesData($ID)
+{
+    $stmt = Conn()->prepare("SELECT * FROM times WHERE ID=?");
+    $stmt->execute([$ID]);
+    $data = $stmt->fetch();
+    return $data;
+}
+
+function CheckAmountOfReservations($ID)
+{
+    $stmt = Conn()->prepare("SELECT * FROM times WHERE ID=?");
+    $stmt->execute([$ID]);
+    $data = $stmt->fetch();
+    return $data['amount_people_in'];
+}
+
+function CreateReserveFile($ID)
+{
+    $data = GetPersonalData();
+    $times = GetTimesData($ID);
+    $file = "reservering.txt";
+    $txt = fopen($file, "w") or die("Unable to open file!");
+    $content = "Reservering Schaatsbaan \n Naam: " . $data['firstname'] . " " . $data['lastname'] . "\n Tijdstip: " . $times['date'] . " " . $times['starttime'] . " - " . $times['endtime'] . "\n Reserveringsnummer: " . $ID;
+    fwrite($txt, $content);
+    fclose($txt);
+
+    header('Content-Description: File Transfer');
+    header('Content-Disposition: attachment; filename=' . basename($file));
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file));
+    header("Content-Type: text/plain");
+    readfile($file);
 }

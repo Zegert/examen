@@ -3,8 +3,8 @@ require_once '../Includes/config.php';
 Session();
 CheckRank(1);
 $register = Register($_GET["ID"]);
-if ($register === true){
-    header("Location:./index.php");
-}else{
+if ($register === true) {
+    CreateReserveFile($_GET["ID"]);
+} else {
     echo $register;
 }
