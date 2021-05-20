@@ -59,6 +59,15 @@ CheckRank(2);
                         <input type="number" class="form-control" name="amount_people_in" placeholder="Grootte groep" min="0" max="100" value="<?php echo $data['amount_people_in'] ?>"><br>
                         
                     </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
+                        </div>
+                        <input type="radio" name="hidden" value="1" id="true" class="form-control" placeholder="Zichtbaarheid">
+                        <label for="true">Zichtbaar</label>
+                        <input type="radio" name="hidden" value="0" id="false" class="form-control" placeholder="Zichtbaarheid">
+                        <label for="false">Verborgen</label>
+                    </div> <!-- form-group// -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Update Tijdslot </button>
                     </div> <!-- form-group// -->

@@ -23,13 +23,15 @@ Session();
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input type="text" name="username" class="form-control" placeholder="Gebruikersnaam" required><br>
+                        <input type="text" name="username" class="form-control" placeholder="Gebruikersnaam"
+                            required><br>
                     </div> <!-- form-group// -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input type="password" class="form-control" name="password" placeholder="Wachtwoord" required><br>
+                        <input type="password" class="form-control" name="password" placeholder="Wachtwoord"
+                            required><br>
                     </div> <!-- form-group// -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
@@ -59,13 +61,23 @@ Session();
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-phone"></i> </span>
                         </div>
-                        <input type="tel" class="form-control" name="phone" pattern="[0-9]{2}-[0-9]{8}" placeholder="06-12345678" required><br>
+                        <input type="tel" class="form-control" name="phone" pattern="[0-9]{2}-[0-9]{8}"
+                            placeholder="06-12345678" required><br>
                     </div> <!-- form-group// 06-30822558-->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
                         </div>
                         <input type="email" name="email" class="form-control" placeholder="E-mailadres" required><br>
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
+                        </div>
+                        <input type="radio" name="member" value="1" id="true" class="form-control" placeholder="Lid">
+                        <label for="true">Wel lid</label>
+                        <input type="radio" name="member" value="0" id="false" class="form-control" placeholder="Lid">
+                        <label for="false">Geen lid</label>
                     </div> <!-- form-group// -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Maak Account </button>

@@ -17,14 +17,14 @@ CheckRank(2);
 
 <body>
     <?php
-        require_once '../Includes/nav.php';
+    require_once '../Includes/nav.php';
     ?>
     <div class="container">
         <div class="card bg-light">
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <h4 class="card-title mt-3 text-center">Maak een tijdslot</h4>
                 <form action="timeslot_proces.php" method="POST">
-                <h5 class="card-title mt-3 text-center">Datum</h5>
+                    <h5 class="card-title mt-3 text-center">Datum</h5>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="far fa-calendar-alt"></i> </span>
@@ -37,7 +37,8 @@ CheckRank(2);
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="far fa-clock"></i> </span>
                         </div>
-                        <input type="time" class="form-control" name="starttime" placeholder="Starttijd" min="06:00" max="22:00" required><br>
+                        <input type="time" class="form-control" name="starttime" placeholder="Starttijd" min="06:00"
+                            max="22:00" required><br>
                     </div> <!-- form-group// -->
                     <h5 class="card-title mt-3 text-center">Eindtijd</h5>
                     <p class="card-title mt-3 text-center">Maximaal 22:00</p>
@@ -45,7 +46,19 @@ CheckRank(2);
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="far fa-clock"></i> </span>
                         </div>
-                        <input type="time" class="form-control" name="endtime" placeholder="Eindtijd" min="06:00" max="22:00" required><br>
+                        <input type="time" class="form-control" name="endtime" placeholder="Eindtijd" min="06:00"
+                            max="22:00" required><br>
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
+                        </div>
+                        <input type="radio" name="hidden" value="1" id="true" class="form-control"
+                            placeholder="Zichtbaarheid">
+                        <label for="true">Zichtbaar</label>
+                        <input type="radio" name="hidden" value="0" id="false" class="form-control"
+                            placeholder="Zichtbaarheid">
+                        <label for="false">Verborgen</label>
                     </div> <!-- form-group// -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Maak Tijdslot </button>

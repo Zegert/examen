@@ -50,9 +50,9 @@ function SQLInjectionFormat($string)
 // Functie verbindt met de database.
 function Conn()
 {
-    // ini_set('display_errors', 1);
-    // ini_set('display_startup_errors', 1);
-    // error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     $dsn         = "mysql:host=localhost;dbname=ex_83504";
     $DB_username = "ex83504";
     $DB_password = "Cy8o^n68";
@@ -67,12 +67,13 @@ function Conn()
     return $conn;
 }
 // Deze functie voegt een gebruiker toe.
-function AddUser($username, $password, $firstname, $lastname, $adress, $town, $phone, $email)
+function AddUser($username, $password, $firstname, $lastname, $adress, $town, $phone, $email, $member)
 {
+    var_dump($member);
     try {
-        $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, adress, town, phone, email, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), SQLInjectionFormat($adress), SQLInjectionFormat($town), SQLInjectionFormat($phone), $email, null, null]);
+        $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, adress, town, phone, email, member, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), SQLInjectionFormat($adress), SQLInjectionFormat($town), SQLInjectionFormat($phone), $email, $member, null, null]);
         $adduser = true;
     } catch (PDOException $e) {
 
@@ -111,7 +112,7 @@ function AmountSpaceFree($amount_people_in)
 function Register($ID)
 {
     try {
-        if (CheckAmountOfReservations($ID) <= 100) {
+        if (CheckAmountOfReservations($ID) <= 99) {
             $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
             $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
             $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
@@ -143,11 +144,11 @@ function UnRegister($amount, $ID, $ID_times)
 }
 
 // functie die ervoor zorgt dat je items aan de functie tabel kan toevoegen
-function AddTime($date, $starttime, $endtime)
+function AddTime($date, $starttime, $endtime, $hidden)
 {
     try {
-        $stmt = Conn()->prepare("INSERT INTO times(ID, date, starttime, endtime, amount_people_in, created_at, updated_at) VALUES (?,?,?,?,?,?,?)");
-        $stmt->execute([null, $date, $starttime, $endtime, 0, null, null]);
+        $stmt = Conn()->prepare("INSERT INTO times(ID, date, starttime, endtime, amount_people_in, hidden, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt->execute([null, $date, $starttime, $endtime, 0, $hidden, null, null]);
         var_dump($stmt);
         $addtime = true;
     } catch (PDOException $e) {
@@ -157,16 +158,30 @@ function AddTime($date, $starttime, $endtime)
 }
 
 // Functie die ervoor zorgt dat je de time tabel kan updaten
-function UpdateTime($date, $starttime, $endtime, $amount_people_in, $ID)
+function UpdateTime($date, $starttime, $endtime, $amount_people_in, $hidden,$ID)
 {
     try {
-        $stmt = Conn()->prepare("UPDATE times SET date=?,starttime=?,endtime=?,amount_people_in=? WHERE ID=?");
-        $stmt->execute([$date, $starttime, $endtime, $amount_people_in, $ID]);
+        $stmt = Conn()->prepare("UPDATE times SET date=?,starttime=?,endtime=?,amount_people_in=?,hidden=? WHERE ID=?");
+        $stmt->execute([$date, $starttime, $endtime, $amount_people_in, $hidden, $ID]);
         $addtime = true;
     } catch (PDOException $e) {
         $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
     }
     return $addtime;
+}
+
+function SelectUserIDsFromReservation($ID)
+{
+    $stmt = Conn()->prepare("SELECT * FROM user_on_time WHERE ID_time=?");
+    $stmt->execute([$ID]);
+    return $stmt;
+}
+
+function GetUserData($ID)
+{
+    $stmt = Conn()->prepare("SELECT * FROM users WHERE ID=?");
+    $stmt->execute([$ID]);
+    return $stmt;
 }
 
 // functie die alle data van een specifieke 'users'-row teruggeeft

@@ -10,6 +10,7 @@ CheckRank(2);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nieuw tijdstip || Admin || De Schaatsliefhebber</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a151c32758.js" crossorigin="anonymous"></script>
   <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css" rel="stylesheet">
   <link href="../Includes/CSS/home.css" rel="stylesheet">
 
@@ -35,6 +36,8 @@ CheckRank(2);
         <th scope="col">Eindtijd</th>
         <th scope="col">Plekken vrij</th>
         <th scope="col">Gemaakt op</th>
+        <th scope="col">Zichtbaarheid</th>
+        <th scope="col">Zie aanmeldingen</th>
         <th scope="col">Aanpassen</th>
       </tr>
     </thead>
@@ -48,7 +51,13 @@ CheckRank(2);
         echo "<td>" . $row['endtime'] . "</td>";
         echo "<td>" . AmountSpaceFree($row['amount_people_in']) . "</td>";
         echo "<td>" . $row['updated_at'] . "</td>";
-        echo '<td><a href="./timeslot_edit.php?ID=' . $row['ID'] . '">Aanpassen</a></td>';
+        if ($row['hidden'] === True) {
+          echo "<td>Zichtbaar</td>";
+        } else {
+          echo "<td>Onzichtbaar</td>";
+        }
+        echo '<td><a href="./timeslot_view.php?ID=' . $row['ID'] . '"><i class="far fa-eye"></i></a></td>';
+        echo '<td><a href="./timeslot_edit.php?ID=' . $row['ID'] . '"><i class="far fa-edit"></i></a></td>';
         echo "</tr>";
       }
       ?>
