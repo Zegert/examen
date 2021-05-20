@@ -30,6 +30,7 @@ CheckRank(2);
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="far fa-calendar-alt"></i> </span>
                         </div>
+                        <input type="number" name="ID" value="<?php echo $data['ID'] ?>" hidden><br>
                         <input type="date" name="date" class="form-control" placeholder="Datum" value="<?php echo $data['date'] ?>" required><br>
                     </div> <!-- form-group// -->
                     <h5 class="card-title mt-3 text-center">Begintijd</h5>
@@ -53,9 +54,9 @@ CheckRank(2);
                     <p class="card-title mt-3 text-center">Maximaal 100 personen</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="far fa-clock"></i> </span>
+                            <span class="input-group-text"> <i class="fas fa-users"></i> </span>
                         </div>
-                        <input type="number" class="form-control" name="endtime" placeholder="Grootte groep" min="0" max="100" value="<?php echo $data['amount_people_in'] ?>"><br>
+                        <input type="number" class="form-control" name="amount_people_in" placeholder="Grootte groep" min="0" max="100" value="<?php echo $data['amount_people_in'] ?>"><br>
                         
                     </div> <!-- form-group// -->
                     <div class="form-group">

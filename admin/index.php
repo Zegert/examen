@@ -24,9 +24,6 @@ CheckRank(2);
       <a class="nav-link">Tijdstippen</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="./timeslot_edit.php">Reserveer voor een groep</a>
-    </li>
-    <li class="nav-item">
       <a class="nav-link" href="./timeslot_create.php">Maak nieuw tijdstip aan</a>
     </li>
   </ul>

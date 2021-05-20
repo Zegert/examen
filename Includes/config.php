@@ -50,9 +50,9 @@ function SQLInjectionFormat($string)
 // Functie verbindt met de database.
 function Conn()
 {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    // ini_set('display_errors', 1);
+    // ini_set('display_startup_errors', 1);
+    // error_reporting(E_ALL);
     $dsn         = "mysql:host=localhost;dbname=ex_83504";
     $DB_username = "ex83504";
     $DB_password = "Cy8o^n68";
@@ -147,6 +147,17 @@ function AddTime($date, $starttime, $endtime)
         $stmt = Conn()->prepare("INSERT INTO times(ID, date, starttime, endtime, amount_people_in, created_at, updated_at) VALUES (?,?,?,?,?,?,?)");
         $stmt->execute([null, $date, $starttime, $endtime, 0, null, null]);
         var_dump($stmt);
+        $addtime = true;
+    } catch (PDOException $e) {
+        $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
+    }
+    return $addtime;
+}
+
+function UpdateTime($date, $starttime, $endtime, $amount_people_in, $ID){
+    try {
+        $stmt = Conn()->prepare("UPDATE times SET date=?,starttime=?,endtime=?,amount_people_in=? WHERE ID=?");
+        $stmt->execute([$date, $starttime, $endtime, $amount_people_in, $ID]);
         $addtime = true;
     } catch (PDOException $e) {
         $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
