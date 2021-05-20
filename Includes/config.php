@@ -26,7 +26,7 @@ function CheckRank($rank)
 {
     if (Session() >= $rank) {
         // Echoed de rank van de gebruiker, puur voor development.
-        echo "Rank: " . Session() . " ID:" . ID();
+        // echo "Rank: " . Session() . " ID:" . ID();
     } else {
         header("location:https://ex83504.ict-lab.nl/logout.php");
     }
@@ -60,11 +60,11 @@ function Conn()
     try {
         $conn = new PDO($dsn, $DB_username, $DB_password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $conn;
     } catch (PDOException $e) {
         $error = "Geen connectie mogelijk. Error: " . $e->getMessage();
         return $error;
     }
+    return $conn;
 }
 // Deze functie voegt een gebruiker toe.
 function AddUser($username, $password, $firstname, $lastname, $phone, $email)
@@ -73,19 +73,32 @@ function AddUser($username, $password, $firstname, $lastname, $phone, $email)
         $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, phone, email, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), $phone, $email, null, null]);
-        echo "yeet";
-        return true;
+        $adduser = true;
     } catch (PDOException $e) {
-        echo "bruh";
-        echo "Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage();
-        return false;
+
+        $adduser =  "Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage();
     }
+    return $adduser;
 }
 // Selecteert alle items uit de times tabel
 function SelectAllTime()
 {
     $stmt = Conn()->prepare("SELECT * FROM times ORDER BY date DESC");
     $stmt->execute();
+    return $stmt;
+}
+
+function SelectMyTime($ID)
+{
+    $stmt = Conn()->prepare("SELECT * FROM user_on_time WHERE ID_user=?");
+    $stmt->execute([$ID]);
+    return $stmt;
+}
+
+function SelectFromMyTimeTimes($ID)
+{
+    $stmt = Conn()->prepare("SELECT * FROM times WHERE ID=? ORDER BY date DESC");
+    $stmt->execute([$ID]);
     return $stmt;
 }
 // Geeft het aantal vrije plekken terug
@@ -98,13 +111,41 @@ function AmountSpaceFree($amount_people_in)
 function Register($ID)
 {
     try {
-        $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
-        $stmt_increment_times->execute([$ID]);
         $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
         $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
-        echo "Geslaagd!";
+        $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
+        $stmt_increment_times->execute([$ID]);
+        $register = true;
     } catch (PDOException $e) {
-        echo "Reservering niet geslaagd. Error: " . $e->getMessage();
+        $register = "Reservering niet geslaagd. Error: " . $e->getMessage();
     }
+    return $register;
+}
 
+function UnRegister($amount, $ID, $ID_times)
+{
+    try {
+        $stmt_insert = Conn()->prepare("DELETE FROM user_on_time WHERE ID=?");
+        $stmt_insert->execute([$ID]);
+        $amount = $amount - 1;
+        $stmt_times = Conn()->prepare("UPDATE times SET amount_people_in=? WHERE ID=?");
+        $stmt_times->execute([$amount, $ID_times]);
+        $unregister = true;
+    } catch (PDOException $e) {
+        $unregister = "Reservering verwijderen niet geslaagd. Error: " . $e->getMessage();
+    }
+    return $unregister;
+}
+
+function AddTime($date, $starttime, $endtime)
+{
+    try {
+        $stmt = Conn()->prepare("INSERT INTO times(ID, date, starttime, endtime, amount_people_in, created_at, updated_at) VALUES (?,?,?,?,?,?,?)");
+        $stmt->execute([null, $date, $starttime, $endtime, 0, null, null]);
+        var_dump($stmt);
+        $addtime = true;
+    } catch (PDOException $e) {
+        $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
+    }
+    return $addtime;
 }

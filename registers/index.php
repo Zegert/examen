@@ -27,21 +27,24 @@ CheckRank(1);
                 <th scope="col">Eindtijd</th>
                 <th scope="col">Plekken vrij</th>
                 <th scope="col">Gemaakt op</th>
-                <th scope="col">Inschrijven</th>
+                <th scope="col">Uitschrijven</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $stmt = SelectAllTime();
-            while ($row = $stmt->fetch()) {
-                echo "<tr>";
-                echo "<td>" . $row['date'] . "</td>";
-                echo "<td>" . $row['starttime'] . "</td>";
-                echo "<td>" . $row['endtime'] . "</td>";
-                echo "<td>" . AmountSpaceFree($row['amount_people_in']) . "</td>";
-                echo "<td>" . $row['updated_at'] . "</td>";
-                echo '<td><a href="./register_proces.php?ID=' . $row['ID'] . '">Inschrijven</a></td>';
-                echo "</tr>";
+            $stmt = SelectMyTime(ID());
+            while ($row_id = $stmt->fetch()) {
+                $stmt_times = SelectFromMyTimeTimes($row_id['ID_time']);
+                while($row = $stmt_times->fetch()){
+                    echo "<tr>";
+                    echo "<td>" . $row['date'] . "</td>";
+                    echo "<td>" . $row['starttime'] . "</td>";
+                    echo "<td>" . $row['endtime'] . "</td>";
+                    echo "<td>" . AmountSpaceFree($row['amount_people_in']) . "</td>";
+                    echo "<td>" . $row_id['updated_at'] . "</td>";
+                    echo '<td><a href="./unregister_proces.php?ID=' . $row_id['ID'] . '&ID_times=' . $row['ID'] . '&amount=' . $row['amount_people_in'] . '">Uitschrijven</a></td>';
+                    echo "</tr>";
+                }
             }
             ?>
 </body>
