@@ -45,6 +45,18 @@ Session();
                     </div> <!-- form-group// -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="far fa-id-card"></i> </span>
+                        </div>
+                        <input type="text" name="adress" class="form-control" placeholder="Adres" required><br>
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="far fa-id-badge"></i> </span>
+                        </div>
+                        <input type="text" name="town" class="form-control" placeholder="Plaats" required><br>
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-phone"></i> </span>
                         </div>
                         <input type="tel" class="form-control" name="phone" pattern="[0-9]{2}-[0-9]{8}" placeholder="06-12345678" required><br>

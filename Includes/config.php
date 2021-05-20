@@ -67,12 +67,12 @@ function Conn()
     return $conn;
 }
 // Deze functie voegt een gebruiker toe.
-function AddUser($username, $password, $firstname, $lastname, $phone, $email)
+function AddUser($username, $password, $firstname, $lastname, $adress, $town, $phone, $email)
 {
     try {
-        $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, phone, email, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), $phone, $email, null, null]);
+        $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, adress, town, phone, email, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([null, SQLInjectionFormat($username), $password, 1, SQLInjectionFormat($firstname), SQLInjectionFormat($lastname), SQLInjectionFormat($adress), SQLInjectionFormat($town), SQLInjectionFormat($phone), $email, null, null]);
         $adduser = true;
     } catch (PDOException $e) {
 
@@ -126,6 +126,7 @@ function Register($ID)
     return $register;
 }
 
+// functie die een gemaakte reservering ongedaan maakt
 function UnRegister($amount, $ID, $ID_times)
 {
     try {
@@ -141,6 +142,7 @@ function UnRegister($amount, $ID, $ID_times)
     return $unregister;
 }
 
+// functie die ervoor zorgt dat je items aan de functie tabel kan toevoegen
 function AddTime($date, $starttime, $endtime)
 {
     try {
@@ -154,7 +156,9 @@ function AddTime($date, $starttime, $endtime)
     return $addtime;
 }
 
-function UpdateTime($date, $starttime, $endtime, $amount_people_in, $ID){
+// Functie die ervoor zorgt dat je de time tabel kan updaten
+function UpdateTime($date, $starttime, $endtime, $amount_people_in, $ID)
+{
     try {
         $stmt = Conn()->prepare("UPDATE times SET date=?,starttime=?,endtime=?,amount_people_in=? WHERE ID=?");
         $stmt->execute([$date, $starttime, $endtime, $amount_people_in, $ID]);
@@ -165,6 +169,7 @@ function UpdateTime($date, $starttime, $endtime, $amount_people_in, $ID){
     return $addtime;
 }
 
+// functie die alle data van een specifieke 'users'-row teruggeeft
 function GetPersonalData()
 {
     $stmt = Conn()->prepare("SELECT * FROM users WHERE ID=?");
@@ -173,6 +178,7 @@ function GetPersonalData()
     return $data;
 }
 
+// Functie die alle data van een specifieke 'times' -row teruggeeft
 function GetTimesData($ID)
 {
     $stmt = Conn()->prepare("SELECT * FROM times WHERE ID=?");
@@ -181,6 +187,7 @@ function GetTimesData($ID)
     return $data;
 }
 
+// Functie die alleen het aantal reserveringen teruggeeft
 function CheckAmountOfReservations($ID)
 {
     $stmt = Conn()->prepare("SELECT * FROM times WHERE ID=?");
@@ -189,13 +196,14 @@ function CheckAmountOfReservations($ID)
     return $data['amount_people_in'];
 }
 
+// Functie maakt een text bestand aan waarin veel data van de gebruiker staat en de afspraak. Zodat het gedownload kan worden.
 function CreateReserveFile($ID)
 {
     $data = GetPersonalData();
     $times = GetTimesData($ID);
     $file = "reservering.txt";
     $txt = fopen($file, "w") or die("Unable to open file!");
-    $content = "Reservering Schaatsbaan \n Naam: " . $data['firstname'] . " " . $data['lastname'] . "\n Tijdstip: " . $times['date'] . " " . $times['starttime'] . " - " . $times['endtime'] . "\n Reserveringsnummer: " . $ID;
+    $content = "Reservering Schaatsbaan \n Naam: " . $data['firstname'] . " " . $data['lastname'] . "\n Woonplaats: " . $data['adress'] .  " " . $data['town'] . " \n Tijdstip: " . $times['date'] . " " . $times['starttime'] . " - " . $times['endtime'] . "\n Reserveringsnummer: " . $ID;
     fwrite($txt, $content);
     fclose($txt);
 
