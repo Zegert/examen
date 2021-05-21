@@ -49,6 +49,16 @@ CheckRank(2);
                         <input type="time" class="form-control" name="endtime" placeholder="Eindtijd" min="06:00"
                             max="22:00" required><br>
                     </div> <!-- form-group// -->
+                    <h5 class="card-title mt-3 text-center">Reserveren groep</h5>
+                    <p class="card-title mt-3 text-center">Maximaal 100 personen</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-users"></i> </span>
+                        </div>
+                        <input type="number" class="form-control" name="amount_people_in" placeholder="Grootte groep" min="0" max="100" value=""><br>
+                        
+                    </div> <!-- form-group// -->
+                    <h5 class="card-title mt-3 text-center">Zichtbaarheid</h5>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>

@@ -1,3 +1,14 @@
+<html>
+<head>
+    <!-- Haal bootstrap op via CDN -->
+    <script src="https://kit.fontawesome.com/a151c32758.js" crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css" rel="stylesheet">
+    <link href="../Includes/CSS/home.css" rel="stylesheet">
+    <!-- Haal eigen CSS op -->
+	<link href="./Includes/CSS/index.css" rel="stylesheet">
+    <title>Reservering verwerk</title>
+</head>
+<body>
 <?php
 require_once '../Includes/config.php';
 Session();
@@ -11,3 +22,6 @@ if ($register === true) {
     // Geeft de error weer, als het niet goed gegaan is
     echo $register;
 }
+?>
+</body>
+</html>

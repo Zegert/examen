@@ -47,12 +47,19 @@ function SQLInjectionFormat($string)
     return $formatted_string;
 }
 
+function ErrorCard($message){
+    echo "<div class='card'><div class='card-body' style='width:90vw; margin-left:5vw;text-align:center;'>";
+    echo $message . "<br>";
+    echo "<a href='https://ex83504.ict-lab.nl/home/' class='btn btn-primary' role='button'>Ga Terug</a>";
+    echo "</div></div>";
+}
+
 // Functie verbindt met de database.
 function Conn()
 {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    // ini_set('display_errors', 1);
+    // ini_set('display_startup_errors', 1);
+    // error_reporting(E_ALL);
     $dsn         = "mysql:host=localhost;dbname=ex_83504";
     $DB_username = "ex83504";
     $DB_password = "Cy8o^n68";
@@ -69,7 +76,6 @@ function Conn()
 // Deze functie voegt een gebruiker toe.
 function AddUser($username, $password, $firstname, $lastname, $adress, $town, $phone, $email, $member)
 {
-    var_dump($member);
     try {
         $stmt = Conn()->prepare("INSERT INTO users(ID, username, password, rank, firstname, lastname, adress, town, phone, email, member, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -77,7 +83,7 @@ function AddUser($username, $password, $firstname, $lastname, $adress, $town, $p
         $adduser = true;
     } catch (PDOException $e) {
 
-        $adduser =  "Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage();
+        $adduser =  ErrorCard("Nieuwe gebruiker niet toegevoegd. Error: " . $e->getMessage());
     }
     return $adduser;
 }
@@ -116,21 +122,36 @@ function AmountSpaceFree($amount_people_in)
     $answer = 100 - $amount_people_in;
     return $answer;
 }
+
+function CheckIfUserIsAlreadyRegistered()
+{
+    $result = Conn()->prepare("SELECT * FROM user_on_time WHERE ID = ?");
+    $result->execute([ID()]);
+    return $result->fetchAll();
+}
 // Registreert een reservering en telt er een bij op in de times tabel.
 function Register($ID)
 {
     try {
-        if (CheckAmountOfReservations($ID) <= 99) {
-            $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
-            $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
-            $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
-            $stmt_increment_times->execute([$ID]);
-            $register = true;
+        if (empty(CheckIfUserIsAlreadyRegistered())) {
+            if (CheckAmountOfReservations($ID) <= 99) {
+                $stmt_insert = Conn()->prepare("INSERT INTO user_on_time(ID, ID_user, ID_time, cancelled, created_at, updated_at) VALUES (?,?,?,?,?,?)");
+                $stmt_insert->execute([null, ID(), $ID, 0, null, null]);
+                $stmt_increment_times = Conn()->prepare("UPDATE times SET amount_people_in = amount_people_in + 1 WHERE ID=?");
+                $stmt_increment_times->execute([$ID]);
+                $register = true;
+            } else {
+                $register = ErrorCard("Dit moment zit helaas al vol.");
+            }
         } else {
-            $register = "Dit moment zit helaas al vol.";
+            $register = ErrorCard("U bent al ingeschreven.");
         }
     } catch (PDOException $e) {
-        $register = "Reservering niet geslaagd. Error: " . $e->getMessage();
+        if (strpos($e, "SQLSTATE[23000]") !== false) {
+            $register = ErrorCard("U hebt al gereserveerd voor een tijdsblok.");
+        } else {
+            $register = ErrorCard("Reservering niet geslaagd. Error: " . $e->getMessage());
+        }
     }
     return $register;
 }
@@ -146,46 +167,47 @@ function UnRegister($amount, $ID, $ID_times)
         $stmt_times->execute([$amount, $ID_times]);
         $unregister = true;
     } catch (PDOException $e) {
-        $unregister = "Reservering verwijderen niet geslaagd. Error: " . $e->getMessage();
+        $unregister = ErrorCard("Reservering verwijderen niet geslaagd. Error: " . $e->getMessage());
     }
     return $unregister;
 }
 
 // functie die ervoor zorgt dat je items aan de functie tabel kan toevoegen
-function AddTime($date, $starttime, $endtime, $hidden)
+function AddTime($date, $starttime, $endtime, $amount_people_in, $hidden)
 {
     try {
         $stmt = Conn()->prepare("INSERT INTO times(ID, date, starttime, endtime, amount_people_in, hidden, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?)");
-        $stmt->execute([null, $date, $starttime, $endtime, 0, $hidden, null, null]);
+        $stmt->execute([null, $date, $starttime, $endtime, $amount_people_in, $hidden, null, null]);
         var_dump($stmt);
         $addtime = true;
     } catch (PDOException $e) {
-        $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
+        $addtime = ErrorCard("Tijd niet toegevoegd. Error: " . $e->getMessage());
     }
     return $addtime;
 }
 
 // Functie die ervoor zorgt dat je de time tabel kan updaten
-function UpdateTime($date, $starttime, $endtime, $amount_people_in, $hidden=0,$ID)
+function UpdateTime($date, $starttime, $endtime, $amount_people_in, $hidden = 0, $ID)
 {
     try {
         $stmt = Conn()->prepare("UPDATE times SET date=?,starttime=?,endtime=?,amount_people_in=?,hidden=? WHERE ID=?");
         $stmt->execute([$date, $starttime, $endtime, $amount_people_in, $hidden, $ID]);
         $updatetime = true;
     } catch (PDOException $e) {
-        $updatetime = "Tijd niet gewijzigd. Error: " . $e->getMessage();
+        $updatetime = ErrorCard("Tijd niet gewijzigd. Error: " . $e->getMessage());
     }
     return $updatetime;
 }
 
 // Functie die ervoor zorgt dat er een times-row verwijderd wordt
-function DeleteTime($ID){
+function DeleteTime($ID)
+{
     try {
         $stmt = Conn()->prepare("DELETE FROM times WHERE ID=?");
         $stmt->execute([$ID]);
         $deletetime = true;
-    }catch(PDOException $e){
-        $deletetime = "Tijd niet verwijderd. Error: " . $e->getMessage();
+    } catch (PDOException $e) {
+        $deletetime = ErrorCard("Tijd niet verwijderd. Error: " . $e->getMessage());
     }
     return $deletetime;
 }
