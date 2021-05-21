@@ -81,10 +81,18 @@ function AddUser($username, $password, $firstname, $lastname, $adress, $town, $p
     }
     return $adduser;
 }
+// Selecteert alle items uit de times tabel, speciaal voor de admins
+function SelectAllTimeAdmin()
+{
+    $stmt = Conn()->prepare("SELECT * FROM times ORDER BY date DESC");
+    $stmt->execute();
+    return $stmt;
+}
+
 // Selecteert alle items uit de times tabel
 function SelectAllTime()
 {
-    $stmt = Conn()->prepare("SELECT * FROM times ORDER BY date DESC");
+    $stmt = Conn()->prepare("SELECT * FROM times WHERE hidden=0 ORDER BY date DESC");
     $stmt->execute();
     return $stmt;
 }
@@ -158,16 +166,28 @@ function AddTime($date, $starttime, $endtime, $hidden)
 }
 
 // Functie die ervoor zorgt dat je de time tabel kan updaten
-function UpdateTime($date, $starttime, $endtime, $amount_people_in, $hidden,$ID)
+function UpdateTime($date, $starttime, $endtime, $amount_people_in, $hidden=0,$ID)
 {
     try {
         $stmt = Conn()->prepare("UPDATE times SET date=?,starttime=?,endtime=?,amount_people_in=?,hidden=? WHERE ID=?");
         $stmt->execute([$date, $starttime, $endtime, $amount_people_in, $hidden, $ID]);
-        $addtime = true;
+        $updatetime = true;
     } catch (PDOException $e) {
-        $addtime = "Tijd niet toegevoegd. Error: " . $e->getMessage();
+        $updatetime = "Tijd niet gewijzigd. Error: " . $e->getMessage();
     }
-    return $addtime;
+    return $updatetime;
+}
+
+// Functie die ervoor zorgt dat er een times-row verwijderd wordt
+function DeleteTime($ID){
+    try {
+        $stmt = Conn()->prepare("DELETE FROM times WHERE ID=?");
+        $stmt->execute([$ID]);
+        $deletetime = true;
+    }catch(PDOException $e){
+        $deletetime = "Tijd niet verwijderd. Error: " . $e->getMessage();
+    }
+    return $deletetime;
 }
 
 function SelectUserIDsFromReservation($ID)

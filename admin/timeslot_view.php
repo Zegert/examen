@@ -40,8 +40,10 @@ CheckRank(2);
         </thead>
         <tbody>
             <?php
+            // Haal alle userID's van reservaties op
             $stmt = SelectUserIDsFromReservation($_GET['ID']);
             while ($row_id = $stmt->fetch()) {
+                // Haal met die ID's de usergegevens op.
                 $stmt_users = GetUserData($row_id['ID_user']);
                 while ($row = $stmt_users->fetch()) {
                     echo "<tr>";
@@ -50,6 +52,7 @@ CheckRank(2);
                     echo "<td>" . $row['lastname'] . "</td>";
                     echo "<td>" . $row['adress'] . "</td>";
                     echo "<td>" . $row['town'] . "</td>";
+                    // Omzetten boolean naar menselijke tekst
                     if ($row['member'] === 1){
                         echo "<td>Lid</td>";
                     }else{

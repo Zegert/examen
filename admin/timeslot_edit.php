@@ -18,6 +18,7 @@ CheckRank(2);
 <body>
     <?php
         require_once '../Includes/nav.php';
+        // Haal de data van de geselecteerde times-row op
         $data = GetTimesData($_GET['ID']);
     ?>
     <div class="container">
@@ -30,6 +31,7 @@ CheckRank(2);
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="far fa-calendar-alt"></i> </span>
                         </div>
+                        <!-- De echo geeft de data uit de database weer -->
                         <input type="number" name="ID" value="<?php echo $data['ID'] ?>" hidden><br>
                         <input type="date" name="date" class="form-control" placeholder="Datum" value="<?php echo $data['date'] ?>" required><br>
                     </div> <!-- form-group// -->
@@ -59,14 +61,16 @@ CheckRank(2);
                         <input type="number" class="form-control" name="amount_people_in" placeholder="Grootte groep" min="0" max="100" value="<?php echo $data['amount_people_in'] ?>"><br>
                         
                     </div> <!-- form-group// -->
+                    <h5 class="card-title mt-3 text-center">Zichtbaarheid</h5>
+                    <p class="card-title mt-3 text-center">Huidige keuze: <?php if($data['hidden']==1){echo "Verborgen";}else{echo "Zichtbaar";} ?></p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fas fa-envelope"></i> </span>
                         </div>
                         <input type="radio" name="hidden" value="1" id="true" class="form-control" placeholder="Zichtbaarheid">
-                        <label for="true">Zichtbaar</label>
+                        <label for="true">Verborgen</label>
                         <input type="radio" name="hidden" value="0" id="false" class="form-control" placeholder="Zichtbaarheid">
-                        <label for="false">Verborgen</label>
+                        <label for="false">Zichtbaar</label>
                     </div> <!-- form-group// -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Update Tijdslot </button>

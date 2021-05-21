@@ -55,10 +55,10 @@ CheckRank(2);
                         </div>
                         <input type="radio" name="hidden" value="1" id="true" class="form-control"
                             placeholder="Zichtbaarheid">
-                        <label for="true">Zichtbaar</label>
+                        <label for="true">Verborgen</label>
                         <input type="radio" name="hidden" value="0" id="false" class="form-control"
                             placeholder="Zichtbaarheid">
-                        <label for="false">Verborgen</label>
+                        <label for="false">Zichtbaar</label>
                     </div> <!-- form-group// -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Maak Tijdslot </button>

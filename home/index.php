@@ -1,6 +1,9 @@
 <?php
+// required het functie bestand
 require_once '../Includes/config.php';
+// Begint een session
 Session();
+// Checkt of de rank even hoog of hoger is dan de ingegeven int
 CheckRank(1);
 ?>
 <html lang="en">
@@ -9,7 +12,6 @@ CheckRank(1);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home || De Schaatsliefhebber</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css" rel="stylesheet">
     <link href="../Includes/CSS/home.css" rel="stylesheet">
 
@@ -32,6 +34,7 @@ CheckRank(1);
         </thead>
         <tbody>
             <?php
+            // Select alle times-velden uit de database
             $stmt = SelectAllTime();
             while ($row = $stmt->fetch()) {
                 echo "<tr>";

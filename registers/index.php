@@ -9,7 +9,6 @@ CheckRank(1);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home || De Schaatsliefhebber</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css" rel="stylesheet">
     <link href="../Includes/CSS/home.css" rel="stylesheet">
 
@@ -32,8 +31,10 @@ CheckRank(1);
         </thead>
         <tbody>
             <?php
+            // Select alle time_on_user-velden waar ik op ingeschreven ben
             $stmt = SelectMyTime(ID());
             while ($row_id = $stmt->fetch()) {
+                // Select alle times-velden met ID's die ik uit de time_on_user-velden heb gehaald
                 $stmt_times = SelectFromMyTimeTimes($row_id['ID_time']);
                 while($row = $stmt_times->fetch()){
                     echo "<tr>";
